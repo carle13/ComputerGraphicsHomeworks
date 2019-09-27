@@ -24,7 +24,34 @@ public:
 
 	virtual bool Intersect(Ray &ray) override
 	{
-		// --- PUT YOUR CODE HERE ---
+		Vec3f difference = ray.org - m_center;
+		float varA = ray.dir.dot(ray.dir);
+		float varB = 2 * ray.dir.dot(difference);
+		float varC = difference.dot(difference) - m_radius * m_radius;
+
+		float inRoot = varB * varB - 4 * varA * varC;
+		if (inRoot < 0)
+		{
+			return false;
+		}
+		float root = sqrtf(inRoot);
+
+		float distance = (-varB - root) / (2 * varA);
+		if (distance > ray.t)
+		{
+			return false;
+		}
+
+		if (distance < Epsilon)
+		{
+			distance = (-varB + root) / (2 * varA);
+			if (distance < Epsilon || distance > ray.t)
+			{
+				return false;
+			}
+		}
+
+		ray.t = distance;
 		return true;
 	}
 	

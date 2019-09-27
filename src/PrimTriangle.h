@@ -26,7 +26,46 @@ public:
 	
 	virtual bool Intersect(Ray& ray) override
 	{
-		// --- PUT YOUR CODE HERE ---
+		const Vec3f edge1 = m_b - m_a;
+		const Vec3f edge2 = m_c - m_a;
+
+		const Vec3f pvector = ray.dir.cross(edge2);
+
+		const float determinant = edge1.dot(pvector);
+		if (fabs(determinant) < Epsilon)
+		{
+			return false;
+		}
+
+		const float invDeterminant = 1.0f / determinant;
+
+		const Vec3f tvector = ray.org - m_a;
+		float lambda = tvector.dot(pvector);
+		lambda *= invDeterminant;
+
+		if (lambda < 0.0f || lambda > 1.0f)
+		{
+			return false;
+		}
+
+		const Vec3f qvector = tvector.cross(edge1);
+		float mu = ray.dir.dot(qvector);
+		mu *= invDeterminant;
+
+		if (mu < 0.0f || mu + lambda > 1.0f)
+		{
+			return false;
+		}
+
+		float f = edge2.dot(qvector);
+		f *= invDeterminant;
+		if (ray.t <= f || f < 1E-4)
+		{
+			return false;
+		}
+
+		ray.t = f;
+
 		return true;
 	}
 

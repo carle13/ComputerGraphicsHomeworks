@@ -22,18 +22,38 @@ Mat RenderFrame(ICamera& camera)
 	for(int y = 0; y< img.rows; y++)
 		for (int x = 0; x < img.cols; x++) {
 			
-			// Initialize your ray here
+			camera.InitRay(x, y, ray);
 			
 			// Your code
 			
 			Vec3f col = RGB(0, 0, 0); // background color
 			
-			/*
-			 * Find closest intersection with scene
-			 * objetcs and calculate color
-			 */
-			
-			// Your code
+			if (s1.Intersect(ray))
+			{
+				col = RGB(1, 0, 0);
+			}
+			if (s2.Intersect(ray))
+			{
+				col = RGB(0, 1, 0);
+			}
+			if (s3.Intersect(ray))
+			{
+				col = RGB(0, 0, 1);
+			}
+
+			if (p1.Intersect(ray))
+			{
+				col = RGB(1, 1, 0);
+			}
+
+			if (t1.Intersect(ray))
+			{
+				col = RGB(0, 1, 1);
+			}
+			if (t2.Intersect(ray))
+			{
+				col = RGB(1, 1, 1);
+			}
 			
 			img.at<Vec3f>(y, x) = col; // store pixel color
 		}

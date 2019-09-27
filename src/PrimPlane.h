@@ -26,8 +26,16 @@ public:
 
 	virtual bool Intersect(Ray& ray) override
 	{
-		// --- PUT YOUR CODE HERE ---
-		return true;
+		float t = (m_origin - ray.org).dot(m_normal) / ray.dir.dot(m_normal);
+		if (t < Epsilon || t > ray.t)
+		{
+			return false;
+		}
+		else
+		{
+			ray.t = t;
+			return true;
+		}
 	}
 	
 	
